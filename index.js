@@ -1,6 +1,7 @@
 var inquirer = require("inquirer");
 var fs = require("fs");
 
+
 var readMeGenerator = new Promise(function (resolve, reject) {
     resolve(inquirer.prompt([
         {
@@ -26,12 +27,17 @@ var readMeGenerator = new Promise(function (resolve, reject) {
         {
             type: "input",
             name: "contribution",
-            message: "Please provide details on contribution guidelines."
+            message: "Please provide details on contribution guidelines"
         },
         {
             type: "input",
-            name: "contribution",
-            message: "Please provide details on contribution guidelines.",
+            name: "tests",
+            message: "Provide examples on how to run tests on your application."
+        },
+        {
+            type: "list",
+            name: "license",
+            message: "Choose a license",
             choices: [
                 "Academic Free License v3.0",
                 "Apache license 2.0",
@@ -64,14 +70,37 @@ var readMeGenerator = new Promise(function (resolve, reject) {
            
     ])
     )
+
 });
 
-
 readMeGenerator.then(function(data){
-    const md = `
+    const README = `
+    ## ${data.title}\n
+    # Description\n
+    ${data.description}\n
+    ## Table of Contents \n
+   * [Installation](#installation)
+   * [Usage](#usage)
+   * [Contribution](#contribution)
+   * [Tests](#tests)\n
+    # Installation\n
+    ${data.installation}\n
+    # Usage \n
+    ${data.usage}\n
+    # License\n
+    ${data.license}\n
+    # Contributing\n
+    ${data.contribution}\n
+    # Tests\n
+    ${data.tests}\n
+    # Questions\n
+   * github.com/${data.github}
+   * ${data.email}
    
-`;
-    fs.writeFile('README.md', md, function (err) {
+  
+`
+    ;
+    fs.writeFile('README.md', README, function (err) {
         if (err) {
             return console.log(err);
         }
